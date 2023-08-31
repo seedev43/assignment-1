@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-func ReadJSON(filename string) map[string]model.Data {
+func ReadJSON(filename string) []model.Data {
 	// path file
 	jsonPath := filepath.Join("./", filename)
 
@@ -25,12 +25,6 @@ func ReadJSON(filename string) map[string]model.Data {
 		log.Fatal(err)
 	}
 
-	participantOfMap := map[string]model.Data{}
-
-	for _, participant := range participants.Participants {
-		participantOfMap[participant.Code] = participant
-	}
-
-	return participantOfMap
+	return participants.Participants
 
 }
