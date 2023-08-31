@@ -1,15 +1,38 @@
 package main
 
 import (
-	"assignment-1/lib"
 	"assignment-1/model"
+	"encoding/json"
 	"fmt"
+	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
+func ConvertJSONToObject(filename string) []model.Data {
+	// path file
+	jsonPath := filepath.Join("./", filename)
+
+	// membaca isi dari file JSON
+	data, err := os.ReadFile(jsonPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var participants model.Participants
+
+	// mengubah data json menjadi object
+	if err := json.Unmarshal(data, &participants); err != nil {
+		log.Fatal(err)
+	}
+
+	return participants.Participants
+
+}
+
 func main() {
-	data := lib.ReadJSON("participants.json")
+	data := ConvertJSONToObject("participants.json")
 	participantOfMap := map[string]model.Data{}
 
 	for _, participant := range data {
@@ -18,7 +41,7 @@ func main() {
 
 	// strings.ToUpper untuk mengubah inputan menjadi huruf besar
 	input := strings.ToUpper(os.Args[1])
-	fmt.Println("=== CARI DATA PESERTA DENGAN KODE PESERTA ===")
+
 	if dataExist, found := participantOfMap[input]; found {
 		fmt.Println("ID:", dataExist.Id)
 		fmt.Println("Nama:", dataExist.Name)
